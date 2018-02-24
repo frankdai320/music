@@ -8,6 +8,9 @@ Submit by {{name}} at {{ date|date:"D d M Y" }} {{ date|time:"H:i" }}.
 <script>
   function onYouTubeIframeAPIReady() {
 	player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+
 	  events: {
 		'onReady': onPlayerReady,
 		'onStateChange': onPlayerStateChange,

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
@@ -7,22 +7,22 @@ from django.core.exceptions import ObjectDoesNotExist
 from .models import Music
 import re
 import requests
-import json
 
 def index(request):
     return getm(request, 1)
 
 def getm(request, musicid):
+    if musicid == 0:
+        musicid = 1
     try:
-        entry = Music.objects.get(pk=musicid)
+        entry = getitem(musicid)
         return render(request, "get.html", {'id':musicid, 'url':entry.link, 'date':entry.date_added, 'name':entry.owner})
-    except ObjectDoesNotExist:
+    except IndexError:
         return render(request, "missing.html", {'id':musicid})
 
 @csrf_exempt
 def add(request):
     if request.method == "POST":
-        regex = re.compile("(youtu\.be\/|youtube\.com\/(watch\?(.*&)?v=|(embed|v)\/))([^\?&\"'>]+)")
         regex = re.compile("http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?")
         match = regex.match(request.POST['url'])
         print(request.POST)
@@ -36,18 +36,21 @@ def add(request):
             else:
                 m = Music(link=id, date_added=timezone.now(), owner=request.POST['name'])
                 m.save()
-                return HttpResponse(json.dumps({'id': m.pk, 'url': request.POST['url']}), content_type="application/json")
+                return JsonResponse({'id': m.pk, 'url': request.POST['url']})
 
     else:
         return render(request, 'add.html')
 
 
+def getitem(num):
+    entry = Music.objects.all()[int(num)+1]
+    return entry
 @csrf_exempt
 def api(request, musicid):
     try:
-        entry = Music.objects.get(pk=musicid)
+        entry = getitem(musicid)
         return HttpResponse(entry.link, content_type='text/plain')
-    except ObjectDoesNotExist:
+    except IndexErorr:
         return HttpResponse('', content_type='text/plain', status=400)
 
 @csrf_exempt

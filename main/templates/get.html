@@ -3,10 +3,12 @@
 Submit by {{name}} at {{ date|date:"D d M Y" }} {{ date|time:"H:i" }}.
 <br>
 
-<iframe id="player" src="http://www.youtube.com/embed/{{url}}?enablejsapi=1&origin=http://example.com" frameborder="0"></iframe>
+<iframe width='640' height='390' id="player" src='http://www.youtube.com/embed/{{url}}?enablejsapi=1' frameborder="0"></iframe>
 
 <script>
   function onYouTubeIframeAPIReady() {
+        Object.defineProperty(document, "referrer", {get : function(){ return "localhost"; }});
+
 	player = new YT.Player('player', {
           height: '390',
           width: '640',

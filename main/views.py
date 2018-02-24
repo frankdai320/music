@@ -41,3 +41,10 @@ def add(request):
         return render(request, 'add.html')
 
 
+@csrf_exempt
+def api(request, musicid):
+    try:
+        entry = Music.objects.get(pk=musicid)
+        return HttpResponse(entry.link, content_type='text/plain')
+    except ObjectDoesNotExist:
+        return HttpResponse('', content_type='text/plain', status=400)

@@ -11,10 +11,15 @@
 			type: 'POST',
 			data: results,
 			success: function(data, status, something) {
-				$("#final").append("<br />" + JSON.stringify(data))
+				$("#final").append("<br />" + data.url + " sucessfully added <a href=/" + data.id + ">Here</a>")
 			},
 			error: function(data, status, something) {
-				$("#final").append("<br />" + JSON.stringify(data))
+				if(status == "200") {
+					$("#final").append("<br />" + data.url + " sucessfully added <a href=/" + data.id + ">here</a>")
+				} else {
+					console.log(data)
+					$("#final").append("<br />" + data.responseText)
+				}
 		}
 		})
 	}

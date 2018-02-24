@@ -9,11 +9,11 @@ import re
 import requests
 
 def index(request):
-    return getm(request, 1)
+    return getm(request, "1")
 
 def getm(request, musicid):
-    if musicid == 0:
-        musicid = 1
+    if musicid == "0":
+        musicid = "1"
     try:
         entry = getitem(musicid)
         return render(request, "get.html", {'id':musicid, 'url':entry.link, 'date':entry.date_added, 'name':entry.owner})
@@ -49,9 +49,10 @@ def getitem(num):
 def api(request, musicid):
     try:
         entry = getitem(musicid)
-        return HttpResponse(entry.link, content_type='text/plain')
-    except IndexErorr:
-        return HttpResponse('', content_type='text/plain', status=400)
+        return JsonResponse({"id": entry.link, "name": entry.owner, "time": entry.date_added.timestamp()})
+    except IndexError:
+        return JsonResponse({}, status=400)
+
 
 @csrf_exempt
 def num(request):

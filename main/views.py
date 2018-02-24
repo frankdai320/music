@@ -43,7 +43,7 @@ def add(request):
 
 
 def getitem(num):
-    entry = Music.objects.all()[int(num)+1]
+    entry = Music.objects.all()[int(num)-1]
     return entry
 @csrf_exempt
 def api(request, musicid):

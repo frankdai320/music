@@ -1,0 +1,39 @@
+<!-- SORRY FOR USELESS JS -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+
+<script>
+	function f() {
+	results = $('#submit').serialize();
+	$('#url').val("");
+	$("#final").append("<br>Submitted to server");
+		$.ajax({
+			url: '/add/',
+			type: 'POST',
+			data: results,
+			success: function(data, status, something) {
+				$("#final").append("<br />" + JSON.stringify(data))
+			},
+			error: function(data, status, something) {
+				$("#final").append("<br />" + JSON.stringify(data))
+		}
+		})
+	}
+	$(function() {
+
+	$('#button').click(f)
+	})
+</script>
+<form id="submit" action=''>
+	<div>
+		<label for="name">Name:</label>
+		<input name="name" id="name">
+	</div>
+	<div>
+		<label for="url">Url:</label>
+		<input name="url" id="url">
+	</div>
+	<div>
+		<button id="button" type=button>Submit</button>
+	</div>
+</form>
+<div id="final"></div>

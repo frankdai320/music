@@ -36,7 +36,7 @@ def add(request):
             else:
                 m = Music(link=id, date_added=timezone.now(), owner=request.POST['name'])
                 m.save()
-                return JsonResponse({'id': m.pk, 'url': request.POST['url']})
+                return JsonResponse({'id': Music.objects.count(), 'url': request.POST['url']})
 
     else:
         return render(request, 'add.html')

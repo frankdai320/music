@@ -35,7 +35,7 @@ def add(request):
             else:
                 m = Music(link=id, date_added=timezone.now(), owner=request.POST['name'])
                 m.save()
-                return HttpResponse(request.POST['url'] + "sucessfully added", content_type="text/plain")
+                return HttpResponse(request.POST['url'] + " sucessfully added " + "<a href=/" + str(m.id) +">here</a>", content_type="text/plain")
 
     else:
         return render(request, 'add.html')

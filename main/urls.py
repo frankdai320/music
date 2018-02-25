@@ -2,8 +2,9 @@ from django.conf.urls import url
 from . import views
 urlpatterns = [
     url('^api/(?P<musicid>\d+)/', views.api, name="get music api"),
-    url('^api/', views.num, name="get number"),
+    url('^api/$', views.num, name="get number"),
     url('^(?P<musicid>\d+)/$', views.getm, name="get music"),
     url('^add/$', views.add, name="add music"),
-    url('^$', views.index,name='index')
+    url('^$', views.index,name='index'),
+    url('^latest$', views.latest, name="latest")
 ]

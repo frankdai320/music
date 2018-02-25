@@ -57,3 +57,7 @@ def api(request, musicid):
 @csrf_exempt
 def num(request):
     return HttpResponse(Music.objects.count(), content_type='text/plain')
+
+@csrf_exempt
+def latest(request):
+    return getm(request,Music.objects.count())

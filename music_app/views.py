@@ -37,7 +37,7 @@ def add(request):
                 return HttpResponse(request.POST['url'] + " is not a valid youtube video", content_type="text/plain",
                                     status=400)
             else:
-                m = Music(link=id, date_added=timezone.now(), owner=request.POST['name'])
+                m = Music(link=id, date_added=timezone.now(), added_by=request.POST['name'])
                 m.save()
                 return JsonResponse({'id': Music.objects.count(), 'url': request.POST['url']})
 
@@ -57,7 +57,7 @@ def getitem(num):
 def api(request, musicid):
     entry = getitem(musicid)
     if entry:
-        return JsonResponse({"id": entry.link, "name": entry.owner, "time": entry.date_added.timestamp()})
+        return JsonResponse({"id": entry.link, "name": entry.added_by, "time": entry.date_added.timestamp()})
     return JsonResponse({}, status=404)
 
 

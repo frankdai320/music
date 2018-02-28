@@ -1,7 +1,7 @@
 {%if entry%}
 {% load tz %}
 {% timezone "America/Los_Angeles" %}
-Submitted by {{entry.owner}} at {{ entry.date_added|date:"D d M Y" }} {{ entry.date_added|time:"H:i" }}.
+Submitted by {{entry.added_by}} at {{ entry.date_added|date:"D d M Y" }} {{ entry.date_added|time:"H:i" }}.
 {% endtimezone %}
 <br>
 <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->

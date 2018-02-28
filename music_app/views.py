@@ -32,7 +32,7 @@ def add(request):
             id = match[1]
             valid = requests.get(
                 "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=" + id + "&format=json")
-            if valid.status_code == 404:
+            if valid.status_code != 200:
                 return HttpResponse(request.POST['url'] + " is not a valid youtube video", content_type="text/plain",
                                     status=400)
             else:

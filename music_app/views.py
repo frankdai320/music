@@ -1,38 +1,40 @@
-from django.shortcuts import render
+import re
+
+import requests
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Music
-import re
-import requests
+
 
 def index(request):
-    return getm(request, "1")
+    return getm(request, 1)
+
 
 def getm(request, musicid):
-    if musicid == "0":
-        musicid = "1"
-    try:
-        entry = getitem(musicid)
-        return render(request, "get.html", {'id':musicid, 'url':entry.link, 'date':entry.date_added, 'name':entry.owner})
-    except IndexError:
-        return render(request, "missing.html", {'id':musicid})
+    if musicid == 0:
+        musicid = 1
+    entry = getitem(musicid)
+    return render(request, "get.html", {'id': musicid, 'entry': entry})  # entry might be None, handled in template
+
 
 @csrf_exempt
 def add(request):
     if request.method == "POST":
         regex = re.compile("http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?")
         match = regex.match(request.POST['url'])
-        print(request.POST)
         if not match:
-           return HttpResponse(request.POST['url'] + " is not a valid video url", content_type='text/plain', status=400)
+            return HttpResponse(request.POST['url'] + " is not a valid video url", content_type='text/plain',
+                                status=400)
         else:
             id = match[1]
-            valid = requests.get("https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=" + id + "&format=json")
+            valid = requests.get(
+                "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=" + id + "&format=json")
             if valid.status_code == 404:
-                return HttpResponse(request.POST['url'] + " is not a valid youtube video", content_type="text/plain", status=400)
+                return HttpResponse(request.POST['url'] + " is not a valid youtube video", content_type="text/plain",
+                                    status=400)
             else:
                 m = Music(link=id, date_added=timezone.now(), owner=request.POST['name'])
                 m.save()
@@ -43,21 +45,26 @@ def add(request):
 
 
 def getitem(num):
-    entry = Music.objects.all()[int(num)-1]
+    try:
+        entry = Music.objects.all()[int(num) - 1]
+    except IndexError:
+        return None
     return entry
+
+
 @csrf_exempt
 def api(request, musicid):
-    try:
-        entry = getitem(musicid)
+    entry = getitem(musicid)
+    if entry:
         return JsonResponse({"id": entry.link, "name": entry.owner, "time": entry.date_added.timestamp()})
-    except IndexError:
-        return JsonResponse({}, status=400)
+    return JsonResponse({}, status=404)
 
 
 @csrf_exempt
 def num(request):
     return HttpResponse(Music.objects.count(), content_type='text/plain')
 
+
 @csrf_exempt
 def latest(request):
-    return getm(request,Music.objects.count())
+    return getm(request, Music.objects.count())

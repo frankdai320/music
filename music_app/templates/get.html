@@ -1,11 +1,12 @@
+{%if entry%}
 {% load tz %}
 {% timezone "America/Los_Angeles" %}
-Submit by {{name}} at {{ date|date:"D d M Y" }} {{ date|time:"H:i" }}.
+Submitted by {{entry.name}} at {{ entry.date_added|date:"D d M Y" }} {{ entry.date_added|time:"H:i" }}.
+{% endtimezone %}
 <br>
-    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-    <div id="player"></div>
-
-    <script>
+<!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+<div id="player"></div>
+<script>
       // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
 
@@ -51,12 +52,24 @@ Submit by {{name}} at {{ date|date:"D d M Y" }} {{ date|time:"H:i" }}.
       function stopVideo() {
         player.stopVideo();
       }
-    </script>
 
 
+
+
+
+
+</script>
+{%else%}
+This id doesn't exist!
+{%endif%}
 <br>
-<a href="/{% if id == "1" %}1{% else %}{{id|add:"-1"}}{% endif %}">Previous</a> <a href="/{{id|add:"1"}}">Next</a>
+{% if id != 1 %}
+<a href="/{{id|add:-1}}">Previous</a>
+{%endif%}
+{%if entry%}
+<a href="/{{id|add:1}}">Next</a>
+{%endif%}
 <br>
 <a href="/add">Add video</a>
 
-{% endtimezone %}
+

@@ -21,7 +21,7 @@ Submitted by {{entry.added_by}} at {{ entry.date_added|date:"D d M Y" }} {{ entr
         player = new YT.Player('player', {
           height: '390',
           width: '640',
-          videoId: '{{url}}',
+          videoId: '{{entry.link}}',
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,

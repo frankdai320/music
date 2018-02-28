@@ -17,7 +17,8 @@ def getm(request, musicid):
     if musicid == 0:
         musicid = 1
     entry = getitem(musicid)
-    return render(request, "get.html", {'id': musicid, 'entry': entry})  # entry might be None, handled in template
+    return render(request, "music_app/get.html", {'id': musicid, 'entry': entry})  # entry might be None, handled in
+    # template
 
 
 @csrf_exempt
@@ -41,7 +42,7 @@ def add(request):
                 return JsonResponse({'id': Music.objects.count(), 'url': request.POST['url']})
 
     else:
-        return render(request, 'add.html')
+        return render(request, 'music_app/add.html')
 
 
 def getitem(num):

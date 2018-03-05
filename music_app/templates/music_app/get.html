@@ -1,12 +1,24 @@
-{%if entry%}
-{% load tz %}
-{% timezone "America/Los_Angeles" %}
-Submitted by {{entry.added_by}} at {{ entry.date_added|date:"D d M Y" }} {{ entry.date_added|time:"H:i" }}.
-{% endtimezone %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 <br>
-<!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-<div id="player"></div>
-<script>
+<div class="container">
+    {%if entry%}
+    {% load tz %}
+    {% timezone "America/Los_Angeles" %}
+    <div class="row">
+        <div class="col">
+            Submitted by {{entry.added_by}} at {{ entry.date_added|date:"D d M Y" }} {{ entry.date_added|time:"H:i" }}.
+        </div>
+    </div>
+    {% endtimezone %}
+    <br>
+    <div class="row">
+        <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+        <div id="player"></div>
+    </div>
+
+    <script>
       // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
 
@@ -53,24 +65,29 @@ Submitted by {{entry.added_by}} at {{ entry.date_added|date:"D d M Y" }} {{ entr
         player.stopVideo();
       }
 
-
-
-
-
-
-
-</script>
-{%else%}
-This id doesn't exist!
-{%endif%}
-<br>
-{% if id != 1 %}
-<a href="/{{id|add:-1}}">Previous</a>
-{%endif%}
-{%if entry%}
-<a href="/{{id|add:1}}">Next</a>
-{%endif%}
-<br>
-<a href="/add">Add video</a>
-
-
+    </script>
+    {%else%}
+    <div class="row">
+        This id doesn't exist!
+    </div>
+    {%endif%}
+    <br>
+    <div class="row">
+        {% if id != 1 %}
+        <div class="col-auto">
+            <a href="/{{id|add:-1}}" class="btn btn-outline-primary btn-sm">Previous</a>
+        </div>
+        {%endif%}
+        {%if entry%}
+        <div class="col-auto">
+            <a href="/{{id|add:1}}" class="btn btn-outline-primary btn-sm">Next</a>
+        </div>
+        {%endif%}
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <a href="/add" class="btn btn-primary">Add video</a>
+        </div>
+    </div>
+</div>

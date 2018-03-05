@@ -1,5 +1,8 @@
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 <!-- SORRY FOR USELESS JS -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
 
 <script>
 	function f() {
@@ -27,18 +30,36 @@
 
 	$('#button').click(f)
 	})
+
+
 </script>
-<form id="submit" action=''>
-	<div>
-		<label for="name">Name:</label>
-		<input name="name" id="name">
-	</div>
-	<div>
-		<label for="url">Url:</label>
-		<input name="url" id="url">
-	</div>
-	<div>
-		<button id="button" type=button>Submit</button>
-	</div>
-</form>
-<div id="final"></div>
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <form id="submit" action=''>
+
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input name="name" id="name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="url">Url:</label>
+                    <input name="url" id="url" class="form-control">
+                </div>
+                <button id="button" type=button class="btn btn-success">Submit</button>
+            </form>
+        </div>
+
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="final"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+

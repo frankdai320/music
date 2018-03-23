@@ -17,8 +17,8 @@ def getm(request, musicid):
     if musicid == 0:
         musicid = 1
     entry = getitem(musicid)
-    return render(request, "music_app/get.html", {'id': musicid, 'entry': entry})  # entry might be None, handled in
-    # template
+    # entry might be None, handled in template
+    return render(request, "music_app/get.html", {'id': musicid, 'entry': entry, 'domain': request.get_host()})
 
 
 @csrf_exempt

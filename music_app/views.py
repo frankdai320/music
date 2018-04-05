@@ -2,7 +2,8 @@ import re
 
 import requests
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
@@ -68,4 +69,4 @@ def num(request):
 
 @csrf_exempt
 def latest(request):
-    return getm(request, Music.objects.count())
+    return redirect(reverse('get music', kwargs={'musicid': Music.objects.count()}))

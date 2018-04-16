@@ -6,6 +6,8 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
+{% include "music_app/header.html" %}
+
 <br>
 <div class="container">
     {%if entry%}
@@ -91,7 +93,7 @@
     <br>
     <div class="row">
         <div class="col">
-            <a href="/add" class="btn btn-primary">Add video</a>
+            <a href="{% url 'add music' %}" class="btn btn-primary">Add video</a>
         </div>
     </div>
 </div>

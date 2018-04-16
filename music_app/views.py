@@ -1,4 +1,5 @@
 import re
+from secrets import randbelow  # using this instead of random because it provides a better distribution
 
 import requests
 from django.http import HttpResponse, JsonResponse
@@ -70,3 +71,8 @@ def num(request):
 @csrf_exempt
 def latest(request):
     return redirect(reverse('get music', kwargs={'musicid': Music.objects.count()}))
+
+
+@csrf_exempt
+def random(request):
+    return redirect(reverse('get music', kwargs={'musicid': randbelow(Music.objects.count()) + 1}))

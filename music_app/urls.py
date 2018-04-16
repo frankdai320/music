@@ -8,5 +8,6 @@ urlpatterns = [
     path('<int:musicid>/', views.getm, name="get music"),
     path('add/', views.add, name="add music"),
     path('latest/', views.latest, name="latest"),
+    path('random/', views.random, name='random'),
     path('', views.index, name='index')
 ]

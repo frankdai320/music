@@ -70,18 +70,28 @@ def api_random(request):
 
 
 @csrf_exempt
+def api_latest(request):
+    return redirect(reverse('get music api', kwargs={'musicid': latest_valid_music_num()}))
+
+
+@csrf_exempt
 def num(request):
     return HttpResponse(Music.objects.count(), content_type='text/plain')
 
 
 @csrf_exempt
 def latest(request):
-    return redirect(reverse('get music', kwargs={'musicid': Music.objects.count()}))
+    return redirect(reverse('get music', kwargs={'musicid': latest_valid_music_num()}))
 
 
 def random_valid_music_num():
     """Return a random number from the set of valid music numbers."""
     return randbelow(Music.objects.count()) + 1
+
+
+def latest_valid_music_num():
+    """Return the number of the latest valid music."""
+    return Music.objects.count()
 
 
 @csrf_exempt

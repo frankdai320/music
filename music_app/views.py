@@ -59,8 +59,14 @@ def getitem(num):
 def api(request, musicid):
     entry = getitem(musicid)
     if entry:
-        return JsonResponse({"id": entry.link, "name": entry.added_by, "time": entry.date_added.timestamp()})
+        return JsonResponse({"id": entry.link, "name": entry.added_by, "time": entry.date_added.timestamp(),
+                             'num': musicid})
     return JsonResponse({}, status=404)
+
+
+@csrf_exempt
+def api_random(request):
+    return redirect(reverse('get music api', kwargs={'musicid': random_valid_music_num()}))
 
 
 @csrf_exempt
@@ -73,6 +79,11 @@ def latest(request):
     return redirect(reverse('get music', kwargs={'musicid': Music.objects.count()}))
 
 
+def random_valid_music_num():
+    """Return a random number from the set of valid music numbers."""
+    return randbelow(Music.objects.count()) + 1
+
+
 @csrf_exempt
 def random(request):
-    return redirect(reverse('get music', kwargs={'musicid': randbelow(Music.objects.count()) + 1}))
+    return redirect(reverse('get music', kwargs={'musicid': random_valid_music_num()}))

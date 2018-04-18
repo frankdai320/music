@@ -12,7 +12,7 @@ from .models import Music
 
 
 def index(request):
-    return getm(request, 1)
+    return render(request, 'music_app/index.html')
 
 
 def getm(request, musicid):
@@ -99,3 +99,8 @@ def latest_valid_music_num():
 @csrf_exempt
 def random(request):
     return redirect(reverse('get music', kwargs={'musicid': random_valid_music_num()}))
+
+
+def go(request):
+    num = request.GET.get('musicid') or 1
+    return redirect(reverse('get music', kwargs={'musicid': num}))

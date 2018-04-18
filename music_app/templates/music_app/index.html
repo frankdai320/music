@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TelegraMusic</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+{% include "music_app/header.html" %}
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            Welcome to TelegraMusic! Enter a music ID below to start, add music, or select another option from the
+            header.
+        </div>
+    </div>
+    <br><br>
+    <div class="row">
+        <div class="col-md-2">
+            <form id="go" action="{% url 'go' %}">
+                <div class="form-group">
+                    <label for="musicid">Music ID (digits only)</label>
+                    <input name="musicid" id="musicid" class="form-control" pattern="[0-9]+" required>
+                </div>
+                <button id="button" form="go" type="submit" class="btn btn-success">Go</button>
+            </form>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+            <form id="add" action="{% url 'add music' %}">
+                <label for="addbutton">Add music</label>
+                <button class="btn btn-primary" id="addbutton">Add video</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

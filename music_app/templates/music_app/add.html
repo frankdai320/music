@@ -19,11 +19,11 @@
 			type: 'POST',
 			data: results,
 			success: function(data, status, something) {
-				$("#final").append("<br />" + data.url + " sucessfully added <a href=/" + data.id + ">Here</a>")
+				$("#final").append("<br />" + data.url + " successfully added <a href=\"" + data.link + "\">here</a>")
 			},
 			error: function(data, status, something) {
 				if(status == "200") {
-					$("#final").append("<br />" + data.url + " sucessfully added <a href=/" + data.id + ">here</a>")
+					$("#final").append("<br />" + data.url + " successfully added <a href=\"" + data.link + "\">here</a>")
 				} else {
 					console.log(data)
 					$("#final").append("<br />" + data.responseText)

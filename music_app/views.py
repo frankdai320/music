@@ -27,21 +27,23 @@ def getm(request, musicid):
 def add(request):
     if request.method == "POST":
         regex = re.compile("http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?")
-        match = regex.match(request.POST['url'])
+        url = request.POST.get('url', '')
+        match = regex.match(url)
         if not match:
-            return HttpResponse(request.POST['url'] + " is not a valid video url", content_type='text/plain',
+            return HttpResponse(url + " is not a valid video url", content_type='text/plain',
                                 status=400)
         else:
             id = match[1]
             valid = requests.get(
                 "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=" + id + "&format=json")
             if valid.status_code != 200:
-                return HttpResponse(request.POST['url'] + " is not a valid youtube video", content_type="text/plain",
+                return HttpResponse(url + " is not a valid youtube video", content_type="text/plain",
                                     status=400)
             else:
-                m = Music(link=id, date_added=timezone.now(), added_by=request.POST['name'])
+                m = Music(link=id, date_added=timezone.now(), added_by=request.POST.get('name', ''))
                 m.save()
-                return JsonResponse({'id': Music.objects.count(), 'url': request.POST['url']})
+                return JsonResponse({'id': Music.objects.count(), 'url': url,
+                                     'link': reverse('get music', kwargs={'musicid': Music.objects.count()})})
 
     else:
         return render(request, 'music_app/add.html')

@@ -64,7 +64,7 @@
 	setTimeout(redirect, 10000)
   }
   function redirect() {
-	  location = "/{{id|add:"1"}}"
+	  location = "{% url 'get music' musicid=id|add:1 %}"
   }
       function stopVideo() {
         player.stopVideo();
@@ -81,12 +81,12 @@
     <div class="row">
         {% if id != 1 %}
         <div class="col-auto">
-            <a href="/{{id|add:-1}}" class="btn btn-outline-primary btn-sm">Previous</a>
+            <a href="{% url 'get music' musicid=id|add:-1 %}" class="btn btn-outline-primary btn-sm">Previous</a>
         </div>
         {%endif%}
         {%if entry%}
         <div class="col-auto">
-            <a href="/{{id|add:1}}" class="btn btn-outline-primary btn-sm">Next</a>
+            <a href="{% url 'get music' musicid=id|add:1 %}" class="btn btn-outline-primary btn-sm">Next</a>
         </div>
         {%endif%}
     </div>

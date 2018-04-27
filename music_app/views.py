@@ -26,7 +26,7 @@ def getm(request, musicid):
 @csrf_exempt
 def add(request):
     if request.method == "POST":
-        regex = re.compile("http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?")
+        regex = re.compile("https?://(?:www\.|m\.)?youtu(?:be\.com/watch\?v=|\.be/)([\w\-_]*)")
         url = request.POST.get('url', '')
         match = regex.match(url)
         if not match:

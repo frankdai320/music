@@ -52,7 +52,7 @@
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
-		    'onError': onError
+            'onError': onError
           }
         });
       }
@@ -66,19 +66,19 @@
       //    The function indicates that when playing a video (state=1),
       //    the player should play for six seconds and then stop.
   function onPlayerStateChange(event) {
-	if (event.data == YT.PlayerState.ENDED) {
-	  setTimeout(redirect, 1000);
-	}
+    if (event.data == YT.PlayerState.ENDED) {
+      setTimeout(redirect, 1000);
+    }
   }
   function onError(event) {
-	setTimeout(redirect, 10000)
+    setTimeout(redirect, 10000)
   }
   function redirect() {
       if (!shuffle) {
-	    location = "{% url 'get music' musicid=id|add:1 %}";
-	  } else {
-	    location = "{% url 'random' %}?shuffle=true";
-	  }
+        location = "{% url 'get music' musicid=id|add:1 %}";
+      } else {
+        location = "{% url 'random' %}?shuffle=true";
+      }
   }
       function stopVideo() {
         player.stopVideo();

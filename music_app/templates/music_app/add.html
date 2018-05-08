@@ -10,31 +10,31 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
 
 <script>
-	function f() {
-	results = $('#submit').serialize();
-	$('#url').val("");
-	$("#final").append("<br>Submitted to server");
-		$.ajax({
-			url: '/add/',
-			type: 'POST',
-			data: results,
-			success: function(data, status, something) {
-				$("#final").append("<br />" + data.url + " successfully added <a href=\"" + data.link + "\">here</a>")
-			},
-			error: function(data, status, something) {
-				if(status == "200") {
-					$("#final").append("<br />" + data.url + " successfully added <a href=\"" + data.link + "\">here</a>")
-				} else {
-					console.log(data)
-					$("#final").append("<br />" + data.responseText)
-				}
-		}
-		})
-	}
-	$(function() {
+    function f() {
+    results = $('#submit').serialize();
+    $('#url').val("");
+    $("#final").append("<br>Submitted to server");
+        $.ajax({
+            url: '/add/',
+            type: 'POST',
+            data: results,
+            success: function(data, status, something) {
+                $("#final").append("<br />" + data.url + " successfully added <a href=\"" + data.link + "\">here</a>")
+            },
+            error: function(data, status, something) {
+                if(status == "200") {
+                    $("#final").append("<br />" + data.url + " successfully added <a href=\"" + data.link + "\">here</a>")
+                } else {
+                    console.log(data)
+                    $("#final").append("<br />" + data.responseText)
+                }
+        }
+        })
+    }
+    $(function() {
 
-	$('#button').click(f)
-	})
+    $('#button').click(f)
+    })
 
 
 </script>

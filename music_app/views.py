@@ -20,7 +20,8 @@ def getm(request, musicid):
         musicid = 1
     entry = getitem(musicid)
     # entry might be None, handled in template
-    return render(request, "music_app/get.html", {'id': musicid, 'entry': entry, 'domain': request.get_host()})
+    return render(request, "music_app/get.html", {'id': musicid, 'entry': entry, 'domain': request.get_host(),
+                                                  'shuffle': request.GET.get('shuffle', False)})
 
 
 @csrf_exempt
@@ -98,9 +99,11 @@ def latest_valid_music_num():
 
 @csrf_exempt
 def random(request):
+    if request.GET.get('shuffle', False):
+        return redirect(reverse('get music', kwargs={'musicid': random_valid_music_num()}) + '?shuffle=true')
     return redirect(reverse('get music', kwargs={'musicid': random_valid_music_num()}))
 
 
 def go(request):
-    num = request.GET.get('musicid') or 1
-    return redirect(reverse('get music', kwargs={'musicid': num}))
+    musicid = request.GET.get('musicid') or 1
+    return redirect(reverse('get music', kwargs={'musicid': musicid}))

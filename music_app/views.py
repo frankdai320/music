@@ -12,6 +12,9 @@ from .models import Music
 
 
 def index(request):
+    if request.GET.get('musicid'):
+        musicid = request.GET.get('musicid') or 1
+        return redirect(reverse('get music', kwargs={'musicid': musicid}))
     return render(request, 'music_app/index.html')
 
 
@@ -82,7 +85,6 @@ def num(request):
     return HttpResponse(Music.objects.count(), content_type='text/plain')
 
 
-@csrf_exempt
 def latest(request):
     return redirect(reverse('get music', kwargs={'musicid': latest_valid_music_num()}))
 
@@ -97,13 +99,7 @@ def latest_valid_music_num():
     return Music.objects.count()
 
 
-@csrf_exempt
 def random(request):
     if request.GET.get('shuffle', False):
         return redirect(reverse('get music', kwargs={'musicid': random_valid_music_num()}) + '?shuffle=true')
     return redirect(reverse('get music', kwargs={'musicid': random_valid_music_num()}))
-
-
-def go(request):
-    musicid = request.GET.get('musicid') or 1
-    return redirect(reverse('get music', kwargs={'musicid': musicid}))

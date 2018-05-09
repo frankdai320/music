@@ -8,7 +8,6 @@ urlpatterns = [
     path('api/latest', views.api_latest, name='api latest'),
     path('api/', views.num, name="get number"),
     path('<int:musicid>/', views.getm, name="get music"),
-    path('go/', views.go, name='go'),
     path('add/', views.add, name="add music"),
     path('latest/', views.latest, name="latest"),
     path('random/', views.random, name='random'),

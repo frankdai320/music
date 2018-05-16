@@ -44,7 +44,8 @@ def add(request):
                 return HttpResponse(url + " is not a valid youtube video", content_type="text/plain",
                                     status=400)
             else:
-                m = Music(link=id, date_added=timezone.now(), added_by=request.POST.get('name', '')[:200])
+                ip = request.META['REMOTE_ADDR']
+                m = Music(link=id, date_added=timezone.now(), added_by=request.POST.get('name', '')[:200], ip=ip)
                 m.save()
                 return JsonResponse({'id': Music.objects.count(), 'url': url,
                                      'link': reverse('get music', kwargs={'musicid': Music.objects.count()})})

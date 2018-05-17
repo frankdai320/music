@@ -30,7 +30,7 @@ def getm(request, musicid):
 
 
 def browse(request):
-    items_per_page = 1000
+    items_per_page = 50
     page_num = int(request.GET.get('page', '1'))
     end_index = items_per_page * page_num + 1
     start_index = end_index - items_per_page

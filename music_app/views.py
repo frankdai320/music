@@ -22,11 +22,23 @@ def getm(request, musicid):
     if musicid == 0:
         musicid = 1
     entry = getitem(musicid)
-    if entry:
-        entry.update_title()  # updates title if not saved within 14 days
     # entry might be None, handled in template
     return render(request, "music_app/get.html", {'id': musicid, 'entry': entry, 'domain': request.get_host(),
                                                   'shuffle': request.GET.get('shuffle', False)})
+
+
+def browse(request):
+    items_per_page = 50
+    page_num = int(request.GET.get('page', '1'))
+    end_index = items_per_page * page_num + 1
+    start_index = end_index - items_per_page
+    entries = []
+    for num in range(start_index, end_index):
+        entry = getitem(num)
+        if entry:
+            entries.append(entry)
+    return render(request, 'music_app/browse.html',
+                  {'page_num': page_num, 'first_num': start_index, 'entries': entries, 'page_length': items_per_page})
 
 
 @csrf_exempt
@@ -61,7 +73,9 @@ def getitem(num):
     try:
         entry = Music.objects.all()[int(num) - 1]
     except IndexError:
-        return None
+        entry = None
+    else:
+        entry.update_title()  # updates title if not saved within 14 days
     return entry
 
 

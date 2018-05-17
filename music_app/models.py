@@ -31,3 +31,4 @@ class Music(models.Model):
         if self.cache_expired(14):  # 14 days
             self.title = self.get_title()
             self.title_cache_time = timezone.now()
+            self.save()

@@ -11,5 +11,7 @@ urlpatterns = [
     path('add/', views.add, name="add music"),
     path('latest/', views.latest, name="latest"),
     path('random/', views.random, name='random'),
+    path('browse', views.browse, name='browse'),
+    path('browse/', views.browse),
     path('', views.index, name='index')
 ]

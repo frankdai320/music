@@ -22,6 +22,8 @@ def getm(request, musicid):
     if musicid == 0:
         musicid = 1
     entry = getitem(musicid)
+    if entry:
+        entry.update_title()  # updates title if not saved within 14 days
     # entry might be None, handled in template
     return render(request, "music_app/get.html", {'id': musicid, 'entry': entry, 'domain': request.get_host(),
                                                   'shuffle': request.GET.get('shuffle', False)})
@@ -45,7 +47,8 @@ def add(request):
                                     status=400)
             else:
                 ip = request.META['REMOTE_ADDR']
-                m = Music(link=id, date_added=timezone.now(), added_by=request.POST.get('name', '')[:200], ip=ip)
+                m = Music(link=id, date_added=timezone.now(), title_cache_time=timezone.now(),
+                          added_by=request.POST.get('name', '')[:200], ip=ip)
                 m.save()
                 return JsonResponse({'id': Music.objects.count(), 'url': url,
                                      'link': reverse('get music', kwargs={'musicid': Music.objects.count()})})

@@ -12,5 +12,6 @@ urlpatterns = [
     path('latest/', views.latest, name="latest"),
     path('random/', views.random, name='random'),
     path('browse/', views.browse, name='browse'),
+    path('all/', views.all_, name='all'),
     path('', views.index, name='index')
 ]

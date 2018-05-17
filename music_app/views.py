@@ -45,6 +45,15 @@ def browse(request):
                   {'page_num': page_num, 'first_num': start_index, 'entries': entries, 'page_length': items_per_page})
 
 
+def all_(request):
+    entries = Music.objects.all()
+    for entry in entries:
+        if not entry.title:
+            entry.update_title(force=True)
+    return render(request, 'music_app/browse.html',
+                  {'page_num': 1, 'first_num': 1, 'entries': entries, 'page_length': 0})  # 0 prevents a "next" button
+
+
 @csrf_exempt
 def add(request):
     if request.method == "POST":

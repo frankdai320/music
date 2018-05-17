@@ -22,6 +22,8 @@ def getm(request, musicid):
     if musicid == 0:
         musicid = 1
     entry = getitem(musicid)
+    if entry:
+        entry.update_title()  # called every 2 weeks at most
     # entry might be None, handled in template
     return render(request, "music_app/get.html", {'id': musicid, 'entry': entry, 'domain': request.get_host(),
                                                   'shuffle': request.GET.get('shuffle', False)})
@@ -33,10 +35,12 @@ def browse(request):
     end_index = items_per_page * page_num + 1
     start_index = end_index - items_per_page
     entries = []
-    for num in range(start_index, end_index):
-        entry = getitem(num)
+    for n in range(start_index, end_index):
+        entry = getitem(n)
         if entry:
             entries.append(entry)
+            if not entry.title:
+                entry.update_title(force=True)
     return render(request, 'music_app/browse.html',
                   {'page_num': page_num, 'first_num': start_index, 'entries': entries, 'page_length': items_per_page})
 
@@ -73,10 +77,9 @@ def getitem(num):
     try:
         entry = Music.objects.all()[int(num) - 1]
     except IndexError:
-        entry = None
+        return None
     else:
-        entry.update_title()  # updates title if not saved within 14 days
-    return entry
+        return entry
 
 
 @csrf_exempt

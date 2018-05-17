@@ -27,8 +27,8 @@ class Music(models.Model):
                             '{vid}&format=json'.format(vid=self.link)).json()
         return info.get('title', '')
 
-    def update_title(self):
-        if self.cache_expired(14):  # 14 days
+    def update_title(self, force=False):
+        if force or self.cache_expired(14):  # 14 days
             self.title = self.get_title()
             self.title_cache_time = timezone.now()
             self.save()

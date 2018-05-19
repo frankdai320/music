@@ -12,19 +12,17 @@
 <div class="container">
     <div class="row"><h2>Browse Music</h2></div>
     <br>
-    {% for entry in entries %}
-    <div class="row">
-        <div class="col-xs-1">
-            <b>{{ first_num | add:forloop.counter0 }}</b>:
-        </div>
-        <div class="col">
-            <a href="{% url 'get music' musicid=first_num|add:forloop.counter0 %}">{{entry.title }}</a>
-        </div>
-    </div>
-    {% empty %}
-    <div class="row">This page is empty.</div>
-    {% endfor %}
+    {% if entries %}
+        <ol start="{{ first_num }}">
+            {% for entry in entries %}
+    	        <li> <a href="{% url 'get music' musicid=first_num|add:forloop.counter0 %}">{{ entry.title }}</a> </li>
+            {% endfor %}
+        </ol>
+        <br>
+    {% else %}
+    <div class="row"> This page is empty. </div>
     <br>
+    {% endif %}
     <div class="row">
         {% if page_num > 1 %}
         <div class="col-auto">

@@ -12,7 +12,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Music
 
-
 def index(request):
     if request.GET.get('musicid'):
         musicid = request.GET.get('musicid') or 1
@@ -48,7 +47,7 @@ def browse(request):
 
 
 def all_(request):
-    entries = Music.objects.all()
+    entries = Music.objects.all().order_by('date_added')
     for entry in entries:
         if not entry.title:
             entry.update_title(force=True)
@@ -86,7 +85,7 @@ def add(request):
 
 def getitem(num):
     try:
-        entry = Music.objects.all()[int(num) - 1]
+        entry = Music.objects.all().order_by('date_added')[int(num) - 1]
     except IndexError:
         return None
     else:

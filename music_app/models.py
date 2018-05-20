@@ -7,7 +7,7 @@ from django.utils import timezone
 
 class Music(models.Model):
     link = models.CharField(max_length=200)
-    date_added = models.DateTimeField('date added')
+    date_added = models.DateTimeField('date added', db_index=True)
     added_by = models.CharField(max_length=200)
     ip = models.CharField(max_length=100, default='')
     title = models.CharField(max_length=100, default='')

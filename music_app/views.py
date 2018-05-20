@@ -1,5 +1,5 @@
 import re
-from secrets import randbelow  # using this instead of random because it provides a better distribution
+import random
 
 import requests
 from django.http import HttpResponse, JsonResponse
@@ -121,7 +121,7 @@ def latest(request):
 
 def random_valid_music_num():
     """Return a random number from the set of valid music numbers."""
-    return randbelow(Music.objects.count()) + 1
+    return random.randint(1, Music.objects.count())
 
 
 def latest_valid_music_num():

@@ -1,5 +1,4 @@
 import re
-import random
 
 import requests
 from django.http import HttpResponse, JsonResponse
@@ -121,6 +120,7 @@ def latest(request):
 
 def random_valid_music_num():
     """Return a random number from the set of valid music numbers."""
+    import random
     return random.randint(1, Music.objects.count())
 
 

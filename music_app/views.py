@@ -90,7 +90,6 @@ def getitem(num):
         return entry
 
 
-@csrf_exempt
 def api(request, musicid):
     entry = getitem(musicid)
     if entry:
@@ -99,17 +98,14 @@ def api(request, musicid):
     return JsonResponse({}, status=404)
 
 
-@csrf_exempt
 def api_random(request):
     return redirect(reverse('get music api', kwargs={'musicid': random_valid_music_num()}))
 
 
-@csrf_exempt
 def api_latest(request):
     return redirect(reverse('get music api', kwargs={'musicid': latest_valid_music_num()}))
 
 
-@csrf_exempt
 def num(request):
     return HttpResponse(Music.objects.count(), content_type='text/plain')
 

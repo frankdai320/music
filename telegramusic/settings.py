@@ -26,19 +26,28 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# Djangae setup
+from djangae.settings_base import *
+
+import djangae.db.backends
+
 # Application definition
 
 INSTALLED_APPS = [
     'music_app.apps.MainConfig',
+    'djangae',
+    'djangae.contrib.security',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'djangae.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
 
 MIDDLEWARE = [
+    'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,8 +82,7 @@ WSGI_APPLICATION = 'telegramusic.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'djangae.db.backends.appengine'
     }
 }
 

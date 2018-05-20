@@ -1,0 +1,21 @@
+runtime: python27
+api_version: 1
+threadsafe: false
+application: telegramusic
+
+libraries:
+- name: django
+  version: latest
+- name: ssl
+  version: latest
+
+builtins:
+- remote_api: on
+
+handlers:
+- url: /_ah/(mapreduce|queue|warmup).*
+  script: telegramusic.wsgi.application
+  login: admin
+
+- url: /.*
+  script: telegramusic.wsgi.application

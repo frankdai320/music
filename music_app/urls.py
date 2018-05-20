@@ -1,7 +1,9 @@
-from . import views
+import django
 from django.utils import six
 
-if six.PY2:
+from . import views
+
+if django.VERSION[0] == 1:
     from django.conf.urls import include, url
 else:
     from django.urls import include, re_path as url

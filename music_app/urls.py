@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^random/$', views.random, name='random'),
     url(r'^browse/$', views.browse, name='browse'),
     url(r'^all/$', views.all_, name='all'),
+    url(r'^renumber/$', views.renumber, name='renumber'),
     url(r'^$', views.index, name='index')
 ]

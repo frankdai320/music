@@ -4,6 +4,7 @@ import requests
 import requests_toolbelt.adapters.appengine
 requests_toolbelt.adapters.appengine.monkeypatch()
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -20,8 +21,8 @@ def index(request):
 
 
 def getm(request, musicid):
-    if musicid == 0:
-        musicid = 1
+    if int(musicid) == 0:
+        return redirect(reverse('get music', kwargs={'musicid': 1}))
     entry = getitem(musicid)
     if entry:
         entry.update_title()  # called every 2 weeks at most
@@ -47,7 +48,7 @@ def browse(request):
 
 
 def all_(request):
-    entries = Music.objects.all().order_by('date_added')
+    entries = Music.objects.all().order_by('position')
     for entry in entries:
         if not entry.title:
             entry.update_title(force=True)
@@ -74,7 +75,7 @@ def add(request):
             else:
                 ip = request.META['REMOTE_ADDR']
                 m = Music(link=id, date_added=timezone.now(), title_cache_time=timezone.now(),
-                          added_by=request.POST.get('name', '')[:200], ip=ip)
+                          added_by=request.POST.get('name', '')[:200], ip=ip, position = Music.objects.count() + 1) # not saved yet
                 m.save()
                 return JsonResponse({'id': Music.objects.count(), 'url': url,
                                      'link': reverse('get music', kwargs={'musicid': Music.objects.count()})})
@@ -82,11 +83,23 @@ def add(request):
     else:
         return render(request, 'music_app/add.html')
 
+def renumber(request):
+    if not request.GET.get('force'):
+        from django.db.models import Max
+        highest_position = Music.objects.all().aggregate(Max('position'))
+        if Music.objects.count == highest_position:
+            return HttpResponse(status=204)
+    music = Music.objects.all().order_by('date_added')
+    for i,m in enumerate(music):
+        m.position = i+1
+        m.save()
+    return HttpResponse(status=204)
+
 
 def getitem(num):
     try:
-        entry = Music.objects.all().order_by('date_added')[int(num) - 1]
-    except IndexError:
+        entry = Music.objects.get(position=int(num))
+    except ObjectDoesNotExist:
         return None
     else:
         return entry

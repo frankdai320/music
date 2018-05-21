@@ -12,6 +12,7 @@ class Music(models.Model):
     ip = models.CharField(max_length=100, default='')
     title = models.CharField(max_length=100, default='')
     title_cache_time = models.DateTimeField('Cache time of title', default=datetime.datetime(2010, 1, 1))
+    position = models.PositiveIntegerField('Position in queue')
 
     def __str__(self):
         return '{link} {date} by {user} ({ip})'.format(link=self.link, date=self.date_added, user=self.added_by,

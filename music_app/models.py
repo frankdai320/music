@@ -1,8 +1,7 @@
 import datetime
-
-import requests
-import requests_toolbelt.adapters.appengine
-requests_toolbelt.adapters.appengine.monkeypatch()
+import json
+import urllib3
+http = urllib3.PoolManager()
 
 from django.db import models
 from django.utils import timezone
@@ -27,9 +26,10 @@ class Music(models.Model):
         return today - self.title_cache_time > valid_period
 
     def get_title(self):
-        info = requests.get('https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v='
-                            '{vid}&format=json'.format(vid=self.link)).json()
-        return info.get('title', '')
+        info = http.request('GET', 'https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v='
+                            '{vid}&format=json'.format(vid=self.link)).data.decode('utf-8')
+        
+        return json.loads(info.data.decode('utf-8')).get('title','')
 
     def update_title(self, force=False):
         if not self.title:

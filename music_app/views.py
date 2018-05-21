@@ -1,8 +1,8 @@
+import json
 import re
+import urllib3
+http = urllib3.PoolManager()
 
-import requests
-import requests_toolbelt.adapters.appengine
-requests_toolbelt.adapters.appengine.monkeypatch()
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
@@ -67,9 +67,9 @@ def add(request):
                                 status=400)
         else:
             id = match.group(1)
-            valid = requests.get(
+            valid = http.request('GET',
                 "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=" + id + "&format=json")
-            if valid.status_code != 200:
+            if valid.status != 200:
                 return HttpResponse(url + " is not a valid youtube video", content_type="text/plain",
                                     status=400)
             else:
@@ -80,7 +80,7 @@ def add(request):
                           added_by=request.POST.get('name', '')[:200],
                           ip=ip,
                           position=Music.objects.count() + 1,  # not saved yet
-                          title=valid.json().get('title', ''))
+                          title=json.loads(valid.data.decode('utf-8')).get('title',''))
 
                 titl
                 m.save()

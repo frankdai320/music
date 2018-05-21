@@ -3,7 +3,6 @@ import re
 import urllib3
 http = urllib3.PoolManager()
 
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render

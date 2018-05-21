@@ -28,8 +28,6 @@ class Music(models.Model):
     def get_title(self):
         info = http.request('GET', 'https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v='
                             '{vid}&format=json'.format(vid=self.link)).data.decode('utf-8')
-        print(info)
-        
         return json.loads(info).get('title','')
 
     def update_title(self, force=False):

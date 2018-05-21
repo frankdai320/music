@@ -74,8 +74,15 @@ def add(request):
                                     status=400)
             else:
                 ip = request.META['REMOTE_ADDR']
-                m = Music(link=id, date_added=timezone.now(), title_cache_time=timezone.now(),
-                          added_by=request.POST.get('name', '')[:200], ip=ip, position = Music.objects.count() + 1) # not saved yet
+                m = Music(link=id,
+                          date_added=timezone.now(),
+                          title_cache_time=timezone.now(),
+                          added_by=request.POST.get('name', '')[:200],
+                          ip=ip,
+                          position=Music.objects.count() + 1,  # not saved yet
+                          title=valid.json().get('title', ''))
+
+                titl
                 m.save()
                 return JsonResponse({'id': Music.objects.count(), 'url': url,
                                      'link': reverse('get music', kwargs={'musicid': Music.objects.count()})})

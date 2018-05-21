@@ -82,7 +82,6 @@ def add(request):
                           position=Music.objects.count() + 1,  # not saved yet
                           title=json.loads(valid.data.decode('utf-8')).get('title',''))
 
-                titl
                 m.save()
                 return JsonResponse({'id': Music.objects.count(), 'url': url,
                                      'link': reverse('get music', kwargs={'musicid': Music.objects.count()})})

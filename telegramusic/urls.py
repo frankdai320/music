@@ -27,5 +27,6 @@ else:
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^_ah/', include('djangae.urls')),
+    url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", mimetype="text/plain")),
     url(r'^', include('music_app.urls'))
 ]

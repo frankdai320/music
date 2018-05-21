@@ -29,6 +29,8 @@ class Music(models.Model):
         return info.get('title', '')
 
     def update_title(self, force=False):
+        if not self.title:
+            force = True
         if force or self.cache_expired(14):  # 14 days
             self.title = self.get_title()
             self.title_cache_time = timezone.now()

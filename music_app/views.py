@@ -84,11 +84,6 @@ def add(request):
         return render(request, 'music_app/add.html')
 
 def renumber(request):
-    if not request.GET.get('force'):
-        from django.db.models import Max
-        highest_position = Music.objects.all().aggregate(Max('position'))
-        if Music.objects.count == highest_position:
-            return HttpResponse(status=204)
     music = Music.objects.all().order_by('date_added')
     for i,m in enumerate(music):
         m.position = i+1

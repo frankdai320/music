@@ -103,7 +103,9 @@ def getitem(num):
 def api(request, musicid):
     entry = getitem(musicid)
     if entry:
-        return JsonResponse({"id": entry.link, "name": entry.added_by, "time": entry.date_added.timestamp(),
+        import time
+        timestamp = int(time.mktime(entry.date_added.timetuple())+entry.date_added.microsecond/1000000.0)
+        return JsonResponse({"id": entry.link, "name": entry.added_by, "time": timestamp,
                              'num': musicid})
     return JsonResponse({}, status=404)
 

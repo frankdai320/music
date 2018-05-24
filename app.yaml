@@ -11,6 +11,9 @@ libraries:
 builtins:
 - remote_api: on
 
+manual_scaling:
+- instances: 1
+
 handlers:
 - url: /_ah/(mapreduce|queue|warmup).*
   script: telegramusic.wsgi.application

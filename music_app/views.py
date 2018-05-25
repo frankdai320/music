@@ -1,6 +1,9 @@
+import json
 import re
+import urllib3
+http = urllib3.PoolManager()
 
-import requests
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -8,7 +11,6 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Music
-
 
 def index(request):
     if request.GET.get('musicid'):
@@ -18,8 +20,8 @@ def index(request):
 
 
 def getm(request, musicid):
-    if musicid == 0:
-        musicid = 1
+    if int(musicid) == 0:
+        return redirect(reverse('get music', kwargs={'musicid': 1}))
     entry = getitem(musicid)
     if entry:
         entry.update_title()  # called every 2 weeks at most
@@ -45,7 +47,7 @@ def browse(request):
 
 
 def all_(request):
-    entries = Music.objects.all()
+    entries = Music.objects.all().order_by('position')
     for entry in entries:
         if not entry.title:
             entry.update_title(force=True)
@@ -64,15 +66,21 @@ def add(request):
                                 status=400)
         else:
             id = match.group(1)
-            valid = requests.get(
+            valid = http.request('GET',
                 "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=" + id + "&format=json")
-            if valid.status_code != 200:
+            if valid.status != 200:
                 return HttpResponse(url + " is not a valid youtube video", content_type="text/plain",
                                     status=400)
             else:
                 ip = request.META['REMOTE_ADDR']
-                m = Music(link=id, date_added=timezone.now(), title_cache_time=timezone.now(),
-                          added_by=request.POST.get('name', '')[:200], ip=ip)
+                m = Music(link=id,
+                          date_added=timezone.now(),
+                          title_cache_time=timezone.now(),
+                          added_by=request.POST.get('name', '')[:200],
+                          ip=ip,
+                          position=Music.objects.count() + 1,  # not saved yet
+                          title=json.loads(valid.data.decode('utf-8')).get('title',''))
+
                 m.save()
                 return JsonResponse({'id': Music.objects.count(), 'url': url,
                                      'link': reverse('get music', kwargs={'musicid': Music.objects.count()})})
@@ -80,11 +88,18 @@ def add(request):
     else:
         return render(request, 'music_app/add.html')
 
+def renumber(request):
+    music = Music.objects.all().order_by('date_added')
+    for i,m in enumerate(music):
+        m.position = i+1
+        m.save()
+    return HttpResponse(status=204)
+
 
 def getitem(num):
     try:
-        entry = Music.objects.all()[int(num) - 1]
-    except IndexError:
+        entry = Music.objects.get(position=int(num))
+    except ObjectDoesNotExist:
         return None
     else:
         return entry
@@ -93,7 +108,9 @@ def getitem(num):
 def api(request, musicid):
     entry = getitem(musicid)
     if entry:
-        return JsonResponse({"id": entry.link, "name": entry.added_by, "time": entry.date_added.timestamp(),
+        import time
+        timestamp = int(time.mktime(entry.date_added.timetuple())+entry.date_added.microsecond/1000000.0)
+        return JsonResponse({"id": entry.link, "name": entry.added_by, "time": timestamp,
                              'num': musicid})
     return JsonResponse({}, status=404)
 
